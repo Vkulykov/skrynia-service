@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<%- include("partials/head", { title: "Реєстрація — Skrynia" }) %>
+</head>
+<body>
+
+<div class="auth">
+  <%- include("partials/auth-side") %>
+  <div class="auth-main">
+    <div class="auth-form">
+      <h1>Нова скриня</h1>
+      <div class="auth-hint">Реєстрація займає хвилину. Без телефону.</div>
+      <% if (error) { %><div class="alert"><%= error %></div><% } %>
+      <form class="auth-fields" method="post" action="/register">
+        <div class="field">
+          <label for="name">Ім'я та прізвище</label>
+          <input class="input" type="text" id="name" name="name" value="<%= name %>" placeholder="Олена Ковальчук" required autofocus>
+        </div>
+        <div class="field">
+          <label for="prefix">Електронна адреса</label>
+          <div class="input-group">
+            <input type="text" id="prefix" name="prefix" value="<%= prefix %>" placeholder="olena.k" required>
+            <span>@skrynia.ua</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="password">Пароль</label>
+          <input class="input" type="password" id="password" name="password" minlength="8" placeholder="Щонайменше 8 символів" required>
+        </div>
+        <div class="field">
+          <label for="password2">Повторіть пароль</label>
+          <input class="input" type="password" id="password2" name="password2" minlength="8" required>
+        </div>
+        <button class="btn btn-ochre auth-submit" type="submit">Створити скриню</button>
+      </form>
+      <div class="auth-alt">Вже є акаунт? <a href="/login">Увійти</a></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<%- include("partials/head", { title: "Вхід — Skrynia" }) %>
+</head>
+<body>
+
+<div class="auth">
+  <%- include("partials/auth-side") %>
+  <div class="auth-main">
+    <div class="auth-form">
+      <h1>Вхід до скрині</h1>
+      <div class="auth-hint">Раді бачити вас знову</div>
+      <% if (error) { %><div class="alert"><%= error %></div><% } %>
+      <form class="auth-fields" method="post" action="/login">
+        <div class="field">
+          <label for="email">Електронна адреса</label>
+          <input class="input" type="email" id="email" name="email" value="<%= email %>" placeholder="olena.k@skrynia.ua" required autofocus>
+        </div>
+        <div class="field">
+          <div class="field-row">
+            <label for="password">Пароль</label>
+            <a href="#">Забули пароль?</a>
+          </div>
+          <input class="input" type="password" id="password" name="password" required>
+        </div>
+        <button class="btn btn-ochre auth-submit" type="submit">Увійти</button>
+      </form>
+      <div class="auth-alt">Немає акаунта? <a href="/register">Зареєструватися</a></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
