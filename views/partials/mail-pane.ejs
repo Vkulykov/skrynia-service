@@ -1,0 +1,43 @@
+<div class="pane">
+  <div class="pane-head">
+    <div class="pane-subject"><%= sel.subject || "(без теми)" %></div>
+    <div class="pane-meta">
+      <div class="pane-avatar"><%= sel.fromInitials %></div>
+      <div class="pane-who">
+        <div class="pane-name"><%= sel.from_name %></div>
+        <div class="pane-from"><%= sel.from_email %> · кому: <%= sel.to_email === user.email ? "мені" : sel.to_email %></div>
+      </div>
+      <div class="pane-date"><%= sel.date %></div>
+      <form method="post" action="/mail/<%= sel.id %>/star">
+        <input type="hidden" name="back" value="<%= activeFolder %>/<%= sel.id %>">
+        <button class="star-btn <%= sel.starred ? "on" : "" %>" type="submit" title="<%= sel.starred ? "Прибрати з важливих" : "Позначити як важливе" %>">★</button>
+      </form>
+    </div>
+  </div>
+  <div class="pane-body"><%= sel.body %></div>
+  <% if (sel.files.length) { %>
+  <div class="pane-files">
+    <% for (const f of sel.files) { %>
+    <a class="chip" href="/attachments/<%= f.id %>"><%= f.original_name %> · <%= f.sizeLabel %></a>
+    <% } %>
+  </div>
+  <% } %>
+  <div class="pane-actions">
+    <a class="btn btn-dark act-dark" href="/mail/<%= activeFolder %>/<%= sel.id %>?compose=reply">Відповісти</a>
+    <a class="btn btn-line act-line" href="/mail/<%= activeFolder %>/<%= sel.id %>?compose=forward">Переслати</a>
+    <form method="post" action="/mail/<%= sel.id %>/spam">
+      <input type="hidden" name="back" value="<%= activeFolder %>">
+      <button class="btn btn-line act-line" type="submit"><%= sel.folder === "spam" ? "Не спам" : "У спам" %></button>
+    </form>
+    <% if (sel.folder === "trash") { %>
+    <form class="act-right" method="post" action="/mail/<%= sel.id %>/delete" onsubmit="return confirm('Видалити лист назавжди?')">
+      <button class="btn btn-line act-line act-del" type="submit">Видалити назавжди</button>
+    </form>
+    <% } else { %>
+    <form class="act-right" method="post" action="/mail/<%= sel.id %>/trash">
+      <input type="hidden" name="back" value="<%= activeFolder %>">
+      <button class="btn btn-line act-line act-del" type="submit">Видалити</button>
+    </form>
+    <% } %>
+  </div>
+</div>

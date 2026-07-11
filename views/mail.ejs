@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<%- include("partials/head", { title: folderName + " — Skrynia" }) %>
+</head>
+<body>
+
+<div class="mail">
+  <%- include("partials/mail-header") %>
+  <div class="mail-body">
+    <%- include("partials/mail-sidebar") %>
+    <%- include("partials/mail-list") %>
+    <% if (sel) { %><%- include("partials/mail-pane") %><% } %>
+  </div>
+</div>
+
+<%- include("partials/compose") %>
+
+<% if (flash) { %>
+<div class="toast <%= flash.type === "err" ? "err" : "" %>">
+  <span><%= flash.text %></span>
+  <% if (flash.link) { %><a href="<%= flash.link %>" target="_blank" rel="noopener">Переглянути лист</a><% } %>
+</div>
+<% } %>
+
+<script src="/app.js"></script>
+</body>
+</html>

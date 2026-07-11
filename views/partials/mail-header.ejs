@@ -1,0 +1,13 @@
+<div class="mail-top">
+  <%- include("logo", { cls: "logo-sm", href: "/mail/inbox" }) %>
+  <form class="mail-search" method="get" action="/mail/<%= activeFolder %>">
+    <input type="search" name="q" value="<%= q %>" placeholder="Пошук у Skrynia">
+  </form>
+  <div class="mail-top-right">
+    <div class="mail-addr"><%= user.email %></div>
+    <div class="avatar"><%= userInitials %></div>
+    <form method="post" action="/logout">
+      <button class="logout" type="submit">Вийти</button>
+    </form>
+  </div>
+</div>

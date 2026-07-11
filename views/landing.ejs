@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<%- include("partials/head", { title: "Skrynia — ваша поштова скриня" }) %>
+</head>
+<body>
+
+<nav class="nav">
+  <%- include("partials/logo") %>
+  <div class="nav-links">
+    <a href="#mozhlyvosti">Можливості</a>
+    <a href="#bezpeka">Безпека</a>
+    <a href="#pro-nas">Про нас</a>
+  </div>
+  <div class="nav-right">
+    <a class="nav-login" href="/login">Увійти</a>
+    <a class="btn btn-dark nav-cta" href="/register">Створити скриню</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <%- include("partials/orn", { count: 48, cls: "orn-hero" }) %>
+  <div class="hero-inner">
+    <h1>Ваша пошта. Ваша скриня.</h1>
+    <p class="hero-sub">Український поштовий сервіс із шифруванням за замовчуванням, без реклами та стеження. Ваші листи зберігаються в Україні.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-ochre hero-cta" href="/register">Створити безкоштовно</a>
+      <a class="hero-ghost" href="#mozhlyvosti">Дізнатись більше</a>
+    </div>
+    <div class="hero-note">Безкоштовно · 10 ГБ · адреса ім'я@skrynia.ua</div>
+  </div>
+  <div class="preview">
+    <div class="preview-top">
+      <div class="preview-logo"></div>
+      <div class="preview-search">Пошук у Skrynia</div>
+      <div class="preview-avatar">ОК</div>
+    </div>
+    <div class="preview-row">
+      <i></i>
+      <div class="preview-from">Нова пошта</div>
+      <div class="preview-subj">Посилка №2043 прибула у відділення<span> — Заберіть відправлення протягом 5 днів</span></div>
+      <div class="preview-time">09:24</div>
+    </div>
+    <div class="preview-row">
+      <i></i>
+      <div class="preview-from">Тарас Мельник</div>
+      <div class="preview-subj">Щодо курсової роботи<span> — Переглянув першу частину вашої курсової — структура хороша…</span></div>
+      <div class="preview-time">Вчора</div>
+    </div>
+    <div class="preview-row">
+      <i></i>
+      <div class="preview-from">Дія</div>
+      <div class="preview-subj">Документ підписано успішно<span> — Ваш підпис додано до заяви №118-3</span></div>
+      <div class="preview-time">Вчора</div>
+    </div>
+  </div>
+</header>
+
+<section class="features" id="mozhlyvosti">
+  <div class="features-grid">
+    <div class="feature" id="bezpeka">
+      <i></i>
+      <h3>Шифрування за замовчуванням</h3>
+      <p>Листи зашифровані під час зберігання та передавання. Ключі — лише у вас.</p>
+    </div>
+    <div class="feature">
+      <i></i>
+      <h3>Сервери в Україні</h3>
+      <p>Дані не залишають країну та захищені українським законодавством.</p>
+    </div>
+    <div class="feature">
+      <i></i>
+      <h3>Без реклами і стеження</h3>
+      <p>Ми не читаємо листи й не продаємо ваші дані. Ніколи.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="pro-nas">
+  <h2>Заведіть власну скриню</h2>
+  <p>Реєстрація займає хвилину. Без телефону.</p>
+  <a class="btn btn-dark" href="/register">Створити скриню</a>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">Skrynia</div>
+  <div>© 2026</div>
+  <div class="footer-links">
+    <a href="#">Умови</a>
+    <a href="#">Приватність</a>
+    <a href="#">Підтримка</a>
+  </div>
+</footer>
+
+</body>
+</html>

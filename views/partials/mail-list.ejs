@@ -1,0 +1,24 @@
+<div class="list">
+  <div class="list-head">
+    <div class="list-title"><%= folderName %></div>
+    <div class="list-sub"><%= subtitle %></div>
+  </div>
+  <div class="list-rows">
+    <% if (!messages.length) { %>
+    <div class="list-empty">Тут порожньо</div>
+    <% } %>
+    <% for (const m of messages) { %>
+    <a class="row <%= m.unread ? "unread" : "" %> <%= sel && sel.id === m.id ? "sel" : "" %>" href="/mail/<%= activeFolder %>/<%= m.id %><%= q ? "?q=" + encodeURIComponent(q) : "" %>">
+      <i></i>
+      <div class="row-main">
+        <div class="row-top">
+          <div class="row-from"><%= activeFolder === "sent" || activeFolder === "drafts" ? "Кому: " + (m.to_email || "(без адреси)") : m.from_name %></div>
+          <div class="row-time"><%= m.time %></div>
+        </div>
+        <div class="row-subj"><%= m.subject || "(без теми)" %></div>
+        <div class="row-snip"><%= m.snip %></div>
+      </div>
+    </a>
+    <% } %>
+  </div>
+</div>

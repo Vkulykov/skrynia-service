@@ -1,0 +1,29 @@
+<div class="compose-wrap <%= compose.open ? "open" : "" %>" id="compose">
+  <div class="compose-shade" data-compose-close></div>
+  <form class="compose" method="post" action="/mail/send" enctype="multipart/form-data">
+    <div class="compose-head">
+      <div class="compose-title">Нове повідомлення</div>
+      <button class="compose-close" type="button" data-compose-close>✕</button>
+    </div>
+    <div class="compose-fields">
+      <div class="compose-line">
+        <label for="compose-to">Кому:</label>
+        <input type="email" id="compose-to" name="to" value="<%= compose.to %>" placeholder="адреса@skrynia.ua" autocomplete="off" required>
+      </div>
+      <div class="compose-line">
+        <label for="compose-subject">Тема:</label>
+        <input type="text" id="compose-subject" name="subject" value="<%= compose.subject %>" autocomplete="off">
+      </div>
+      <textarea class="compose-text" name="body" placeholder="Текст листа…">
+<%= compose.body %></textarea>
+    </div>
+    <% if (compose.draftId) { %><input type="hidden" name="draftId" value="<%= compose.draftId %>"><% } %>
+    <div class="compose-foot">
+      <button class="btn btn-ochre compose-send" type="submit">Надіслати</button>
+      <label class="compose-attach">Прикріпити файл<input type="file" name="files" multiple hidden></label>
+      <span class="compose-files"></span>
+      <button class="compose-draft" type="submit" formaction="/mail/draft" formnovalidate>Зберегти чернетку</button>
+      <button class="compose-discard" type="button" data-compose-close>Кошик</button>
+    </div>
+  </form>
+</div>

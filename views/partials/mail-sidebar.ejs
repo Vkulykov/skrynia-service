@@ -1,0 +1,15 @@
+<div class="sidebar">
+  <button class="compose-btn" type="button" data-compose-open>＋ Написати</button>
+  <% for (const f of folders) { %>
+  <a class="folder <%= f.key === activeFolder ? "active" : "" %>" href="/mail/<%= f.key %>">
+    <i></i>
+    <span><%= f.name %></span>
+    <% if (f.count) { %><b><%= f.count %></b><% } %>
+  </a>
+  <% } %>
+  <div class="sidebar-bottom">
+    <div class="storage-label"><%= storage.label %></div>
+    <div class="storage-bar"><div style="width:<%= storage.percent %>%"></div></div>
+    <%- include("orn", { count: 9, cls: "orn-side" }) %>
+  </div>
+</div>
