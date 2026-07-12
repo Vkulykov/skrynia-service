@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const db = require("../db");
+const { isValidPrefix } = require("../format");
 
 const router = express.Router();
 const DOMAIN = "skrynia.ua";
@@ -54,7 +55,7 @@ router.post("/register", (req, res) => {
   const fail = (error) => res.status(400).render("register", { error, name, prefix });
 
   if (!name || name.length > 60) return fail("Вкажіть ваше ім'я");
-  if (!/^[a-z0-9][a-z0-9._-]{1,31}$/.test(prefix)) {
+  if (!isValidPrefix(prefix)) {
     return fail("Адреса: 2–32 символи, латинські літери, цифри, крапка, дефіс");
   }
   if (password.length < 8) return fail("Пароль має містити щонайменше 8 символів");

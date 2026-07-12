@@ -5,6 +5,15 @@ const express = require("express");
 const multer = require("multer");
 const db = require("../db");
 const { sendExternal } = require("../mailer");
+const {
+  initials,
+  plural,
+  fmtSize,
+  snippet,
+  safeBack,
+  decodeName,
+  isValidRecipient
+} = require("../format");
 
 const router = express.Router();
 const DOMAIN = "skrynia.ua";
@@ -40,11 +49,6 @@ function requireAuth(req, res, next) {
   next();
 }
 
-function initials(name) {
-  const parts = String(name).trim().split(/\s+/).filter(Boolean);
-  return parts.slice(0, 2).map((w) => w[0].toUpperCase()).join("") || "?";
-}
-
 function parseDate(s) {
   return new Date(s.replace(" ", "T") + "Z");
 }
@@ -67,25 +71,6 @@ function longTime(s) {
   return `${d.getDate()} ${MONTHS[d.getMonth()]}${year}, ${d.toTimeString().slice(0, 5)}`;
 }
 
-function plural(n, one, few, many) {
-  const m10 = n % 10;
-  const m100 = n % 100;
-  if (m10 === 1 && m100 !== 11) return one;
-  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
-  return many;
-}
-
-function fmtSize(bytes) {
-  if (bytes >= 1024 ** 3) return (bytes / 1024 ** 3).toFixed(1).replace(".", ",") + " ГБ";
-  if (bytes >= 1024 ** 2) return (bytes / 1024 ** 2).toFixed(1).replace(".", ",") + " МБ";
-  if (bytes >= 1024) return Math.round(bytes / 1024) + " КБ";
-  return bytes + " Б";
-}
-
-function snippet(body) {
-  return String(body).replace(/\s+/g, " ").trim().slice(0, 90);
-}
-
 function quote(m) {
   const quoted = String(m.body).split("\n").map((line) => "> " + line).join("\n");
   return `\n\n${longTime(m.created_at)}, ${m.from_name} <${m.from_email}>:\n${quoted}`;
@@ -93,14 +78,6 @@ function quote(m) {
 
 function setFlash(req, type, text, link) {
   req.session.flash = { type, text, link: link || null };
-}
-
-function safeBack(value) {
-  return /^[a-z]+(\/\d+)?$/.test(String(value || "")) ? String(value) : "inbox";
-}
-
-function decodeName(name) {
-  return Buffer.from(name, "latin1").toString("utf8");
 }
 
 function saveAttachments(messageId, files) {
@@ -242,7 +219,7 @@ router.post("/mail/send", requireAuth, (req, res) => {
     const body = String(req.body.body || "");
     const files = req.files || [];
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) {
+    if (!isValidRecipient(to)) {
       files.forEach((f) => fs.unlink(f.path, () => {}));
       setFlash(req, "err", "Вкажіть коректну адресу отримувача");
       return res.redirect("/mail/inbox");
