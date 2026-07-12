@@ -2,10 +2,14 @@ const path = require("path");
 const fs = require("fs");
 const Database = require("better-sqlite3");
 
-const dataDir = path.join(__dirname, "..", "data");
-fs.mkdirSync(dataDir, { recursive: true });
+// Шлях до бази можна перевизначити через SKRYNIA_DB (використовується у тестах,
+// напр. окремий тимчасовий файл або ":memory:"). За замовчуванням — data/skrynia.db.
+const dbPath = process.env.SKRYNIA_DB || path.join(__dirname, "..", "data", "skrynia.db");
+if (dbPath !== ":memory:") {
+  fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+}
 
-const db = new Database(path.join(dataDir, "skrynia.db"));
+const db = new Database(dbPath);
 db.pragma("journal_mode = WAL");
 db.pragma("foreign_keys = ON");
 
