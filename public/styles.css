@@ -853,6 +853,28 @@ button {
   color: #8F8577;
 }
 
+.list-action-form {
+  display: contents;
+}
+
+.list-action {
+  margin-left: auto;
+  align-self: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #A85F1F;
+  padding: 6px 12px;
+  border: 1.5px solid #E7DECD;
+  border-radius: 8px;
+  background: none;
+  white-space: nowrap;
+}
+
+.list-action:hover {
+  border-color: #C1742E;
+  color: #26231F;
+}
+
 .list-rows {
   flex: 1;
   overflow: auto;

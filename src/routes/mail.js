@@ -159,8 +159,21 @@ router.get("/mail/:folder/:id?", requireAuth, (req, res) => {
   const counts = {
     inbox: db.prepare("SELECT COUNT(*) c FROM messages WHERE owner_id = ? AND folder = 'inbox' AND unread = 1").get(userId).c,
     drafts: db.prepare("SELECT COUNT(*) c FROM messages WHERE owner_id = ? AND folder = 'drafts'").get(userId).c,
-    spam: db.prepare("SELECT COUNT(*) c FROM messages WHERE owner_id = ? AND folder = 'spam'").get(userId).c
+    spam: db.prepare("SELECT COUNT(*) c FROM messages WHERE owner_id = ? AND folder = 'spam'").get(userId).c,
+    trash: db.prepare("SELECT COUNT(*) c FROM messages WHERE owner_id = ? AND folder = 'trash'").get(userId).c
   };
+
+  // Контекстна масова дія для поточної теки (показуємо лише поза пошуком).
+  let listAction = null;
+  if (!q && folderKey === "inbox" && counts.inbox > 0) {
+    listAction = { url: "/mail/inbox/read-all", label: "Прочитати всі" };
+  } else if (!q && folderKey === "trash" && counts.trash > 0) {
+    listAction = {
+      url: "/mail/trash/empty",
+      label: "Очистити кошик",
+      confirm: "Очистити кошик? Усі листи буде видалено назавжди."
+    };
+  }
 
   const used = db
     .prepare("SELECT COALESCE(SUM(a.size), 0) s FROM attachments a JOIN messages m ON m.id = a.message_id WHERE m.owner_id = ?")
@@ -204,7 +217,8 @@ router.get("/mail/:folder/:id?", requireAuth, (req, res) => {
       label: `${fmtSize(used)} із 10 ГБ`,
       percent: Math.min(100, Math.round((used / QUOTA) * 100))
     },
-    flash
+    flash,
+    listAction
   });
 });
 
@@ -280,6 +294,31 @@ router.post("/mail/draft", requireAuth, (req, res) => {
     setFlash(req, "ok", "Чернетку збережено");
     res.redirect("/mail/drafts");
   });
+});
+
+// Масова дія: позначити всі вхідні як прочитані.
+router.post("/mail/inbox/read-all", requireAuth, (req, res) => {
+  const info = db
+    .prepare("UPDATE messages SET unread = 0 WHERE owner_id = ? AND folder = 'inbox' AND unread = 1")
+    .run(req.user.id);
+  setFlash(req, "ok", info.changes ? "Усі листи позначено прочитаними" : "Непрочитаних листів немає");
+  res.redirect("/mail/inbox");
+});
+
+// Масова дія: очистити кошик — остаточно видалити всі листи з нього.
+router.post("/mail/trash/empty", requireAuth, (req, res) => {
+  const files = db
+    .prepare(
+      "SELECT DISTINCT a.stored_name FROM attachments a JOIN messages m ON m.id = a.message_id WHERE m.owner_id = ? AND m.folder = 'trash'"
+    )
+    .all(req.user.id);
+  const info = db.prepare("DELETE FROM messages WHERE owner_id = ? AND folder = 'trash'").run(req.user.id);
+  for (const f of files) {
+    const still = db.prepare("SELECT COUNT(*) c FROM attachments WHERE stored_name = ?").get(f.stored_name).c;
+    if (!still) fs.unlink(path.join(uploadsDir, f.stored_name), () => {});
+  }
+  setFlash(req, "ok", info.changes ? "Кошик очищено" : "Кошик уже порожній");
+  res.redirect("/mail/trash");
 });
 
 router.post("/mail/:id/trash", requireAuth, (req, res) => {

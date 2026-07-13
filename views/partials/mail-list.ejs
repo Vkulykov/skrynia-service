@@ -2,6 +2,11 @@
   <div class="list-head">
     <div class="list-title"><%= folderName %></div>
     <div class="list-sub"><%= subtitle %></div>
+    <% if (listAction) { %>
+    <form class="list-action-form" method="post" action="<%= listAction.url %>"<% if (listAction.confirm) { %> onsubmit="return confirm('<%= listAction.confirm %>')"<% } %>>
+      <button class="list-action" type="submit"><%= listAction.label %></button>
+    </form>
+    <% } %>
   </div>
   <div class="list-rows">
     <% if (!messages.length) { %>
