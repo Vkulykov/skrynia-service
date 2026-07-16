@@ -22,3 +22,5 @@ npm run seed
 npm start
 
 Застосунок буде доступний на http://localhost:3000.
+
+<img width="1470" height="771" alt="image" src="https://github.com/user-attachments/assets/434aa6eb-5f3c-49fc-9125-9a9899d845ea" />
